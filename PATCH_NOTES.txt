@@ -1,0 +1,125 @@
+Fluids_MediaPlayer - patch notes: now-playing overlay
+=====================================================
+
+WHAT THIS PATCH DOES
+
+  1. Position memory. The overlay remembers where you put it across restarts and when you
+     swap to another wallpaper and back.
+       - Fixed a bug where Lively delivering your settings late (slow boot, wallpaper swap)
+         made the overlay forget a dragged position.
+       - New setting "Saved position code" (overlay section, under Unlock). Drag the card with
+         Unlock ticked, then paste the code shown under it into that box. Lively keeps that
+         setting, so the spot survives restarts and swaps. Clear the box to put the card back
+         in the default spot (bottom left of the first screen).
+
+  2. Cleanup. The "Start on monitor" and "Start position" presets are gone; dragging the card
+     (and the saved position code) replaces them.
+
+  3. A little more space between the song title and the artist. The artist line stays where it
+     was; only the title moves up. To change the amount, edit TITLE_GAP at the top of
+     js/overlay-frame.js (0.3 = 30% of the title's font size; 0 = the old tight spacing).
+
+LIVELY HAS TO BE RUNNING (this part is on you)
+This patch can only REMEMBER the overlay's position. It cannot start Lively. If Lively is
+not running there is no wallpaper at all, so nothing for the overlay to appear on.
+Whether Lively starts with the PC is entirely up to the user.
+
+We recommend adding it to your startup apps, but it is not required:
+  - In Lively: Settings (gear) > General > turn on "Start with Windows"
+  - or in Windows: Settings > Apps > Startup > turn on Lively Wallpaper
+If you would rather launch Lively yourself each time, that works fine too. The saved
+position is applied whenever the wallpaper starts.
+
+-----------------------------------------------------
+Per-monitor wave size + firework bursts
+-----------------------------------------------------
+1. Waves (and trail travel) now scale to each monitor's own height. Fill in "Monitor layout", e.g.
+     4096x2160@200, 1920x1080@100
+   (left to right). The script checks whether Lively gave it a canvas in real pixels or Windows-scaled
+   units and picks the matching math. New slider "Wave size follows each monitor's size" (0 = off).
+   Auto-detect can only guess the monitor COUNT, so mixed-size monitors need the layout filled in.
+2. New slider "Firework bursts" (0 = old behaviour). Bursts spread away from recent ones, strong hits open
+   in a small ring, and in intense parts bursts are a bit smaller, trails shorter and old dye fades faster.
+   Fine tuning lives in INSTR.FW near the top of js/script.js.
+
+3. "Waves start on" dropdown (Left monitor by default). Hits start on that monitor as a small bloom, cross to the
+   other monitor as a tight streak, and spread out (big bloom + ring) where they land. Cross time per note is in
+   INSTR.SHOT.T near the top of js/script.js. Nothing spawns outside a monitor's own area.
+4. "Room off-screen (%)" slider (15 by default, 0 = off). The fluid area is bigger than the screen on every side, so
+   waves drift off the edges instead of piling up. It costs GPU (resolution grows with it), so lower it if you
+   see slowdown.
+5. America mode (checkbox, on by default). When the art's only real colors are red and blue, the fluid is rebuilt as a flag:
+   red 41.5% / white 36.9% / blue 21.5%, the proportions of the real U.S. flag (13 stripes, canton 7 stripes tall and 40% of the
+   width, stars NOT counted so the canton stays solid blue and the fluid doesn't wash out). All reds merge into one red and all
+   blues into one blue; cream / faded-white stripes become white instead of a vivid yellow, and white is added if there were none.
+   The red and blue are locked to flag hues (AMERICA.RED_OUT / BLUE_OUT) so tints in the art (orange, cyan text) can't shift them.
+   The primary-color lean and instrument role colors are skipped so the flag mix stays exact. Art with a true yellow (yellow + black,
+   red + yellow + blue) is untouched. Settings are in AMERICA near the palette code.
+6. Color detection rework (grayscale mask). Before anything is decided, every black and grayscale pixel (black, gray, white) is thrown
+   away completely (ART.MIN_SAT). Everything after that - which colors to pick, whether the art has color at all - only sees the pixels
+   that survived. This fixes covers that are mostly black with a thin band of color (Dark Side of the Moon's rainbow) falling back to
+   red + rose, and muted / faded covers (a washed-out flag) doing the same. The old share-of-the-whole-cover tests are gone. Slightly
+   tinted neutrals (cream, beige, sepia) survive the mask but score low, so they only matter when nothing stronger is there. White only
+   exists in America mode. One noise floor remains (ART.MIN_COLOR_SHARE, 0.2%): a speck or compression noise on black & white art
+   still counts as black & white. Art is also sampled at 128 px instead of 64 so thin bands keep their true color.
+7. Wave colors follow the cover's color ratio. After the grayscale mask, each picked color's weight is its share of the surviving
+   (colored) pixels; hues that weren't picked (too close to a picked hue, too small, or past 8 colors) give their area to the nearest
+   picked hue so the shares add up. The old flattening (WEIGHT_FLATTEN / MULTI_FLATTEN, which boosted small accents) is removed.
+   Two-color art uses its own ratio instead of the 'Two-color balance' slider (the slider still drives your own two colors).
+   NOTE: the 'Primary color' option still pushes the biggest color on top of this; turn it off for the pure ratio.
+8. Color rotation for art with 3+ colors. Pure area ratio washed busy covers out (a big cream / yellow area swamped everything else),
+   so 3+ color art now uses a loop: primary, secondary, next of the remaining colors, primary, secondary, next of the remaining, ...
+   Primary and secondary each get 1/3 of the splats, the other colors share the last 1/3 and are walked through in order.
+   Importance = area x vividness (faint cream counts little), not raw area. Applies to instrument hits and random / burst splats.
+   1-2 color art and America mode are unchanged. The Primary color option no longer affects 3+ color art (the rotation decides).
+   Switch: ART.ROTATE_MIN_COLORS (3).
+9. Yellow is never the primary color. If the art has yellow (hue 45-70 degrees, ART.YELLOW_HUE) it automatically takes the secondary
+   slot; the best non-yellow color is primary and the rest follow in rank order. Yellow still plays in the loop. A yellow-only cover
+   has nothing else to lead with, so it is unchanged.
+10. Off-white is dismissed as white. A pixel that is bright (ART.WHITE_MIN_VAL, 0.80) and barely saturated (ART.WHITE_MAX_SAT 0.20, or
+    ART.WARM_WHITE_MAX_SAT 0.30 for cream / ivory hues) is closer to white than to any color, so it is masked out with the grayscale.
+    This stops a cream icon on a one-color cover from turning into a vivid yellow. Single-color art now always gets the same hue in a
+    darker tone as its partner (ART.PARTNER_VAL), never a lighter or different color.
+11. Stray greens fixed. Two filters: (a) anti-aliasing blends are ignored (a pixel on the straight line between two clearly different
+    neighbors AND muddier than them, e.g. the green fringe where yellow meets blue; ART.BLEND_*), and (b) a hue must cover at least
+    0.5% of the colored pixels to become a wave color, smaller slivers hand their area to the nearest picked hue (ART.MIN_AREA_SHARE).
+12. America mode: instruments keep their own flag color again instead of picking by ratio (the old pick put white on 37% of every
+    instrument's hits). Red = drums + bass (they fire the most), white = vocals, blue = track + guitar (AMERICA.ROLE_COLOR). The ratio still sets the weights of random splats.
+13. Fireplace mode (checkbox, on by default). Art whose only real colors are yellow and / or orange (hue 12-70 degrees) becomes fire:
+    each wave is born hot yellow and cools to orange, then deep red as it travels (trail puffs are colored by the wave's age, random
+    splats sit anywhere along that range). The orange comes from the art when it has one, otherwise a stock orange; the yellow and red are
+    added when missing. The art must also be bright and vivid (FIRE.MIN_VAL / MIN_SAT, 0.70) so brown, rust and wood tones are not fire. Settings in FIRE near the palette code. America mode is checked first; art with red / blue / green is not fire.
+14. New slider 'America mode: white on drums + bass' (default 20%). That share of drum and bass hits plays white instead of red, so the
+    flag's white can be brought in on the busiest instruments without giving up red. 0 = all red. Code: AMERICA.WHITE_SUB / WHITE_SUB_ROLES.
+15. Fireplace mode reworked so the fire shifts in real time. Detection: art whose only real colors are red, orange and / or yellow (bright and
+    vivid) is fire, and whichever of the three is missing is added. Waves run on a heat scale (0 yellow, 0.5 orange, 1 red): each new wave is born
+    at a heat that drifts slowly back and forth over time (FIRE.PERIOD, 30 s) with some spread (FIRE.SPREAD) so all three colors stay around, and
+    it cools toward red along its trail. How fast it cools follows the wave's speed: slow waves (bass) are a slow burn that stays warm
+    (FIRE.COOL_SLOW), fast waves (highs, hard hits) are sparks that flash through every color (FIRE.COOL_FAST). Before, every wave was born hot yellow and only the cursor showed other colors.
+
+-----------------------------------------------------
+Fireplace: yellow limit
+-----------------------------------------------------
+New slider "Fireplace: yellow limit" (70 by default, 0 = the old look). Yellow is the brightest of the fire's three
+colors and the fluid adds colors together, so it washed the fire out, especially at the hot end of the 30 second heat
+drift. fireGate() in js/script.js now (1) raises the hottest allowed heat so the top end is amber gold instead of lemon,
+(2) bends births toward orange / red, (3) caps how much yellow can be out at once, and (4) dims the yellow end.
+Knobs are in the FIRE block (FLOOR, CURVE, YELLOW_CAP, HOT_DIM).
+
+-----------------------------------------------------
+Neon boost
+-----------------------------------------------------
+New slider "Neon boost" (70 by default, 0 = off). Neon art (fluorescent yellow, hot cyan / pink) was washing out in the
+fluid: thin dye looked like dark khaki, overlapping colors added up to white, and the bloom pushed bright cores toward
+white. When most of the album's color is neon (very saturated AND bright, see NEON in js/script.js), the display shader
+now fades the thin haze back to dark, restores saturation, and keeps overexposed cores in their color instead of clipping
+to white. It eases in and out with the song, and ordinary art, fire and flag palettes are not touched.
+
+-----------------------------------------------------
+Neon boost, v2 (spectrum-aware haze)
+-----------------------------------------------------
+The first neon pass fixed the cores but left a mustard fog on yellow albums. Cause: yellow and cyan carry far more brightness per
+bit of dye than red or blue, so a thin film of them fills the screen as a dull fog (a dim yellow is mustard, a dim red is just a
+deeper red). The neon pass now runs AFTER the bloom is added (so the glow can't bring the fog back) and crushes the faint haze of
+bright hues toward dark, leaving them as glowing shapes on a dark ground. Red / blue haze is left alone, so albums like
+Samurai keep their soft look. Same "Neon boost" slider.

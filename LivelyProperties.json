@@ -1,0 +1,431 @@
+{
+  "labelNp": {
+    "type": "label",
+    "value": "Now Playing Overlay (song info on screen)"
+  },
+  "npEnabled": {
+    "type": "checkbox",
+    "value": true,
+    "text": "Show now-playing overlay (album art, title and artist on screen)"
+  },
+  "npUnlock": {
+    "type": "checkbox",
+    "value": false,
+    "text": "Unlock to drag (drag it into place, then untick to lock it; mouse stirring pauses while unlocked)"
+  },
+  "npMirror": {
+    "type": "checkbox",
+    "value": false,
+    "text": "Mirror layout (cover on the right, text right-aligned)"
+  },
+  "npSize": {
+    "type": "slider",
+    "min": 40,
+    "max": 250,
+    "tick": 211,
+    "text": "Overlay size (%)",
+    "value": 100
+  },
+  "npMaxWidth": {
+    "type": "slider",
+    "min": 20,
+    "max": 100,
+    "tick": 81,
+    "text": "Overlay max width (% of screen width, 100 = full width; longer titles scroll, shorter ones stay still)",
+    "value": 75
+  },
+  "npScrim": {
+    "type": "slider",
+    "min": 0,
+    "max": 100,
+    "tick": 101,
+    "text": "Backing panel darkness (helps text stand out, 0 = none)",
+    "value": 45
+  },
+  "npBold": {
+    "type": "checkbox",
+    "value": false,
+    "text": "Bold title"
+  },
+  "npFont": {
+    "type": "textbox",
+    "value": "",
+    "text": "Extra font (optional): an installed font name, e.g. Spotify Mix, or a .ttf / .otf / .woff2 file name placed in the wallpaper's fonts folder, e.g. MyFont.ttf"
+  },
+  "monitorCount": {
+    "type": "dropdown",
+    "value": 0,
+    "text": "Number of monitors (Auto-detect works it out from the screen shape)",
+    "items": [
+      "Auto-detect",
+      "2",
+      "3",
+      "4"
+    ]
+  },
+  "monitorLayout": {
+    "type": "textbox",
+    "value": "",
+    "text": "Monitor layout (optional: leave blank to auto-detect. Only fill in for mixed-size monitors, left to right as WIDTHxHEIGHT@scaling%, e.g. 2560x1440@125, 1920x1080@100)"
+  },
+  "perMonitor": {
+    "type": "checkbox",
+    "value": true,
+    "text": "Separate waves per monitor (needs Lively Span layout)"
+  },
+  "overscan": {
+    "type": "slider",
+    "min": 0,
+    "max": 40,
+    "tick": 41,
+    "text": "Room off-screen (%) (extra fluid area past every screen edge so waves can drift off instead of piling up; higher uses more GPU, 0 = off)",
+    "value": 15
+  },
+  "wavesFrom": {
+    "type": "dropdown",
+    "value": 1,
+    "text": "Waves start on (the other monitor receives them: streaks cross over and spread out where they land)",
+    "items": [
+      "Every monitor (each makes its own)",
+      "Left monitor",
+      "Right monitor"
+    ]
+  },
+  "monSizeFollow": {
+    "type": "slider",
+    "min": 0,
+    "max": 100,
+    "tick": 101,
+    "text": "Wave size follows each monitor's size (100 = waves scale to each screen, 0 = same size on every monitor; needs the Monitor layout filled in)",
+    "value": 100
+  },
+  "fireworks": {
+    "type": "slider",
+    "min": 0,
+    "max": 100,
+    "tick": 101,
+    "text": "Firework bursts (higher = bursts spread out, open up in a ring and clear space in intense parts; 0 = old behaviour)",
+    "value": 60
+  },
+  "label1": {
+    "type": "label",
+    "value": "Performance (speed vs. quality)"
+  },
+  "quality": {
+    "type": "dropdown",
+    "value": 0,
+    "text": "Quality (picture sharpness, lower = faster)",
+    "items": [
+      "High",
+      "Medium",
+      "Low",
+      "Very Low"
+    ]
+  },
+  "simResolution": {
+    "type": "dropdown",
+    "value": 2,
+    "text": "Sim Resolution (wave detail, lower = faster)",
+    "items": [
+      "32",
+      "64",
+      "128",
+      "256"
+    ]
+  },
+  "label0": {
+    "type": "label",
+    "value": "Audio"
+  },
+  "audioReact": {
+    "type": "checkbox",
+    "value": true,
+    "text": "Visualiser (waves react to music)"
+  },
+  "instrumentTrack": {
+    "type": "checkbox",
+    "value": true,
+    "text": "Instrument tracking (each instrument makes its own waves, off = bass only)"
+  },
+  "waveSpeed": {
+    "type": "slider",
+    "min": 5,
+    "max": 100,
+    "tick": 96,
+    "text": "Wave speed (how fast and strong the waves move)",
+    "value": 23
+  },
+  "bassCutoff": {
+    "type": "slider",
+    "min": 0,
+    "max": 100,
+    "tick": 101,
+    "text": "Bass range (lower = deep bass only, used when instrument tracking is off)",
+    "value": 20
+  },
+  "synthPulse": {
+    "type": "slider",
+    "min": 10,
+    "max": 100,
+    "tick": 91,
+    "text": "Instrument sensitivity (how easily waves trigger)",
+    "value": 60
+  },
+  "volumeSize": {
+    "type": "slider",
+    "min": 0,
+    "max": 100,
+    "tick": 101,
+    "text": "Volume sizing (loud = bigger waves, 0 = off)",
+    "value": 100
+  },
+  "intensityImpact": {
+    "type": "slider",
+    "min": 0,
+    "max": 100,
+    "tick": 101,
+    "text": "Song intensity (waves grow in big moments, 0 = off)",
+    "value": 70
+  },
+  "fadeHold": {
+    "type": "slider",
+    "min": 0,
+    "max": 100,
+    "tick": 101,
+    "text": "End-of-song fade (how long waves linger, 0 = off)",
+    "value": 50
+  },
+  "noteTravel": {
+    "type": "slider",
+    "min": 0,
+    "max": 100,
+    "tick": 101,
+    "text": "Low-note trails (bass leaves longer trails, 0 = off)",
+    "value": 100
+  },
+  "randomSplats": {
+    "type": "checkbox",
+    "value": false,
+    "text": "Random splats (surprise bursts of color)"
+  },
+  "cursorInfluence": {
+    "type": "slider",
+    "min": 0,
+    "max": 100,
+    "tick": 101,
+    "text": "Mouse stirring (how much your cursor moves the waves, 0 = off)",
+    "value": 67
+  },
+  "label2": {
+    "type": "label",
+    "value": "Color"
+  },
+  "colorOverride": {
+    "type": "checkbox",
+    "value": false,
+    "text": "Color override (use your own colors instead of album art)"
+  },
+  "defaultColor1": {
+    "type": "color",
+    "text": "Color 1 (your color, also used when there is no album art)",
+    "value": "#FF0000"
+  },
+  "defaultColor2": {
+    "type": "color",
+    "text": "Color 2 (your color, also used when there is no album art)",
+    "value": "#FF9494"
+  },
+  "twoToneBalance": {
+    "type": "slider",
+    "min": 0,
+    "max": 100,
+    "tick": 101,
+    "text": "Two-color balance (left = more Color 2, right = more Color 1)",
+    "value": 55
+  },
+  "americaMode": {
+    "type": "checkbox",
+    "value": true,
+    "text": "America mode (art that is only red and blue becomes a flag mix: red 41.5% / white 36.9% / blue 21.5%)"
+  },
+  "americaWhiteRate": {
+    "type": "slider",
+    "min": 0,
+    "max": 100,
+    "tick": 101,
+    "text": "America mode: white on drums + bass (0 = all red, higher = white takes over more of their hits)",
+    "value": 20
+  },
+  "fireMode": {
+    "type": "checkbox",
+    "value": true,
+    "text": "Fireplace mode (art that is only yellow / orange becomes fire: each wave is born hot yellow and cools to orange, then red)"
+  },
+  "neonBoost": {
+    "type": "slider",
+    "min": 0,
+    "max": 100,
+    "tick": 101,
+    "text": "Neon boost (albums with neon colors keep their punch: saturation is restored and glowing cores stay colored instead of washing to white, 0 = off)",
+    "value": 70
+  },
+  "fireYellow": {
+    "type": "slider",
+    "min": 0,
+    "max": 100,
+    "tick": 101,
+    "text": "Fireplace: yellow limit (higher = warmer fire with less yellow, 0 = off)",
+    "value": 70
+  },
+  "primaryLean": {
+    "type": "checkbox",
+    "value": true,
+    "text": "Primary color (the album's main color leads the mood)"
+  },
+  "primaryStrength": {
+    "type": "slider",
+    "min": 0,
+    "max": 100,
+    "tick": 101,
+    "text": "Primary color strength (how much the waves use the main color)",
+    "value": 60
+  },
+  "label3": {
+    "type": "label",
+    "value": "Wave Look (Simulation)"
+  },
+  "densityDiffusion": {
+    "max": 40,
+    "min": 0,
+    "tick": 41,
+    "text": "Density Diffusion (how fast color fades out)",
+    "type": "slider",
+    "value": 10
+  },
+  "velocityDiffusion": {
+    "max": 400,
+    "min": 0,
+    "tick": 401,
+    "text": "Velocity Diffusion (how fast motion slows down)",
+    "type": "slider",
+    "value": 65
+  },
+  "pressure": {
+    "max": 100,
+    "min": 0,
+    "tick": 101,
+    "text": "Pressure (how strongly waves push each other apart)",
+    "type": "slider",
+    "value": 10
+  },
+  "vorticity": {
+    "max": 50,
+    "min": 0,
+    "tick": 51,
+    "text": "Vorticity (swirliness, higher = more curls)",
+    "type": "slider",
+    "value": 14
+  },
+  "splatRadius": {
+    "max": 100,
+    "min": 1,
+    "tick": 100,
+    "text": "Splat Radius (size of each color burst)",
+    "type": "slider",
+    "value": 40
+  },
+  "shading": {
+    "type": "checkbox",
+    "value": true,
+    "text": "Shading (3D look on the waves)"
+  },
+  "bloomEnable": {
+    "type": "checkbox",
+    "value": true,
+    "text": "Bloom (soft glow)"
+  },
+  "bloomIntensity": {
+    "max": 200,
+    "min": 10,
+    "tick": 191,
+    "text": "Bloom Intensity (glow strength)",
+    "type": "slider",
+    "value": 93
+  },
+  "bloomThreshold": {
+    "max": 100,
+    "min": 0,
+    "tick": 101,
+    "text": "Bloom Threshold (how bright before it glows, lower = more glow)",
+    "type": "slider",
+    "value": 55
+  },
+  "sunRaysEnable": {
+    "type": "checkbox",
+    "value": true,
+    "text": "Sunrays (light beams from bright spots)"
+  },
+  "sunRaysWeight": {
+    "max": 100,
+    "min": 30,
+    "tick": 71,
+    "text": "Sunray Weight (beam strength)",
+    "type": "slider",
+    "value": 40
+  },
+  "label4": {
+    "type": "label",
+    "value": "Background"
+  },
+  "backgroundColor": {
+    "text": "Background color (solid color behind the waves)",
+    "type": "color",
+    "value": "#000000"
+  },
+  "backgroundSrc": {
+    "type": "folderDropdown",
+    "value": "pexels-neosiam-601798.jpg",
+    "text": "Background image or video (from the wallpapers folder)",
+    "filter": "*.jpg|*.jpeg|*.webp|*.png|*.webm",
+    "folder": "wallpapers"
+  },
+  "backgroundFit": {
+    "type": "dropdown",
+    "value": 2,
+    "text": "Background fit (how the image fills the screen)",
+    "items": [
+      "Contain",
+      "Cover",
+      "Fill",
+      "None"
+    ]
+  },
+  "backgroundEnabled": {
+    "type": "checkbox",
+    "value": false,
+    "text": "Show background image or video"
+  },
+  "label5": {
+    "type": "label",
+    "value": "Logo Overlay"
+  },
+  "overlaySrc": {
+    "type": "folderDropdown",
+    "value": "icon-lively-300.png",
+    "text": "Logo image",
+    "filter": "*.jpg|*.jpeg|*.webp|*.png|*.svg",
+    "folder": "overlays"
+  },
+  "overlaySize": {
+    "max": 100,
+    "min": 5,
+    "text": "Logo size",
+    "type": "slider",
+    "value": 25
+  },
+  "overlayEnabled": {
+    "type": "checkbox",
+    "value": false,
+    "text": "Show logo"
+  }
+}

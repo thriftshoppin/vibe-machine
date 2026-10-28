@@ -1,0 +1,13 @@
+{
+  "AppVersion": "2.0.7.4",
+  "Title": "Vibe Machine",
+  "Thumbnail": "thumbnail.jpg",
+  "Preview": "preview.gif",
+  "Desc": "A standalone audio-reactive fluid wallpaper for Lively, with album artwork, a now-playing overlay, multi-monitor simulation, and America, Fireplace, and Neon color modes.",
+  "Author": "xoxoCherryB",
+  "License": "MIT",
+  "Contact": "https://github.com/thriftshoppin/Vibe-Machine-v1",
+  "Type": 1,
+  "Arguments": "--audio --system-nowplaying --pause-event true",
+  "FileName": "index.html"
+}
